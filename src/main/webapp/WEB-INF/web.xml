@@ -9,7 +9,7 @@
 
   <servlet>
   	<servlet-name>ControllerServlet</servlet-name>
-  	<servlet-class>com.wkfs.calcEngineWebApp.ControllerServlet</servlet-class>
+  	<servlet-class>com.wkfs.calcEngineWebApp.controller.ControllerServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>ControllerServlet</servlet-name>

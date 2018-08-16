@@ -1,4 +1,4 @@
-package com.wkfs.calcEngineWebApp;
+package com.wkfs.calcEngineWebApp.controller;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,9 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.wkfs.calcEngineWebApp.model.Operation;
 import com.wkfsfrc.ce.AppCore.Calculator;
 
 /**
@@ -32,6 +36,7 @@ import com.wkfsfrc.ce.AppCore.Calculator;
 // after that the controller processes that data and
 // the response returns a way for us to see that the data has been processed
 
+@RestController
 public class ControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -96,13 +101,19 @@ public class ControllerServlet extends HttpServlet {
 			throws ServletException, IOException {
 			String JSON=request.getParameter("input");
 			System.out.println(JSON);
-			JSONObject jsonObjectCalc;
+			
+			JSONArray jsonArray;
 			try {
-				jsonObjectCalc= new JSONObject(JSON);
+				jsonArray=(JSONArray) new JSONTokener(JSON).nextValue();
+				JSONObject jObject=jsonArray.getJSONObject(0);
+				Operation op=new Operation(jObject.getString("operation"), jObject.getString("operands"));
+				
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			
 			
 		
