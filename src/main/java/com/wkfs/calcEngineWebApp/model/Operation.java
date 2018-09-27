@@ -3,6 +3,15 @@ package com.wkfs.calcEngineWebApp.model;
 public class Operation {
 	private String operation;
 	private String operands;
+	private String result;
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
 	public String getOperation() {
 		return operation;
 	}

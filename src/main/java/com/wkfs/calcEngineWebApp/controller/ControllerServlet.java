@@ -17,8 +17,11 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wkfs.calcEngineWebApp.model.Operation;
+import com.wkfs.calcEngineWebApp.util.calcWebAppUtil;
 import com.wkfsfrc.ce.AppCore.Calculator;
+import com.wkfsfrc.ce.Exception.InvalidStatementException;
 
 /**
  * Servlet implementation class HelloWorld
@@ -39,17 +42,14 @@ import com.wkfsfrc.ce.AppCore.Calculator;
 @RestController
 public class ControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-
-
-
-
+	String result = null;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	private Calculator calculator;
+
 	public void init() {
-		calculator= new Calculator();
+		calculator = new Calculator();
 		Properties classes = new Properties();
 		InputStream input = null;
 		try {
@@ -61,7 +61,6 @@ public class ControllerServlet extends HttpServlet {
 		calculator.setMathOperationsList(classes);
 	}
 
-	
 	public ControllerServlet() {
 		super();
 	}
@@ -71,16 +70,16 @@ public class ControllerServlet extends HttpServlet {
 	 *      response)
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		String action = request.getServletPath();
-		
+
 		try {
 			switch (action) {
 			case "/CalcWebApp":
 				showCalculatorView(request, response);
 				break;
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,7 +90,6 @@ public class ControllerServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/calculatorView.jsp");
 		dispatcher.forward(request, response);
 	}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -99,27 +97,36 @@ public class ControllerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-			String JSON=request.getParameter("input");
-			System.out.println(JSON);
-			
-			JSONArray jsonArray;
-			try {
-				jsonArray=(JSONArray) new JSONTokener(JSON).nextValue();
-				JSONObject jObject=jsonArray.getJSONObject(0);
-				Operation op=new Operation(jObject.getString("operation"), jObject.getString("operands"));
+		StringBuilder jsonBuilder = new StringBuilder();
+		ObjectMapper mapper = new ObjectMapper();
+
+		String JSON = request.getParameter("input");
+
+		JSONArray jsonArray;
+		try {
+			if (new JSONTokener(JSON).nextValue() instanceof JSONArray) {
+				jsonArray = (JSONArray) new JSONTokener(JSON).nextValue();
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject jObject = jsonArray.getJSONObject(i);
+					calcWebAppUtil.calculate(jObject, calculator, jsonBuilder, mapper);
+				}
+			} else {
+				JSONObject jObject= new JSONObject(JSON);
+				calcWebAppUtil.calculate(jObject, calculator, jsonBuilder, mapper);
+
 				
-				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-			
-			
-			
-		
-		//out.println("This is the doPost() method!");
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+		result = jsonBuilder.toString();
+		request.setAttribute("result", result);
 		doGet(request, response);
 
 	}
+
+
 
 }
