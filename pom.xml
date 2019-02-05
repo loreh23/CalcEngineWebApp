@@ -92,11 +92,7 @@
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>Parent</groupId>
-			<artifactId>AppCore</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		
 
 
 
