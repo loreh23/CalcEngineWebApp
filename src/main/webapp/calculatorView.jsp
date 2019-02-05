@@ -25,9 +25,9 @@ span.inline {
 
 
 	<div class="container">
-		<form name="resultForm" method="get" action="CalcWebApp">
+		<form name="resultForm" method="get" action="CalcWebApp" >
 		<h2>Result</h2>
-		<textarea rows="25" cols="70" name="result"><c:if
+		<textarea rows="25" cols="70" name="result" readonly><c:if
 				test="${result != null}">
 				<c:out value='${result}' />
 			</c:if></textarea>

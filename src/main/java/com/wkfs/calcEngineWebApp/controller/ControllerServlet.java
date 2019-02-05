@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wkfs.calcEngineWebApp.model.Operation;
-import com.wkfs.calcEngineWebApp.util.calcWebAppUtil;
+import com.wkfs.calcEngineWebApp.util.CalcWebAppUtil;
 import com.wkfsfrc.ce.AppCore.Calculator;
 import com.wkfsfrc.ce.Exception.InvalidStatementException;
 
@@ -108,11 +108,11 @@ public class ControllerServlet extends HttpServlet {
 				jsonArray = (JSONArray) new JSONTokener(JSON).nextValue();
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject jObject = jsonArray.getJSONObject(i);
-					calcWebAppUtil.calculate(jObject, calculator, jsonBuilder, mapper);
+					CalcWebAppUtil.calculate(jObject, calculator, jsonBuilder, mapper);
 				}
 			} else {
 				JSONObject jObject= new JSONObject(JSON);
-				calcWebAppUtil.calculate(jObject, calculator, jsonBuilder, mapper);
+				CalcWebAppUtil.calculate(jObject, calculator, jsonBuilder, mapper);
 
 				
 			}

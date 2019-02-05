@@ -9,7 +9,7 @@ import com.wkfs.calcEngineWebApp.model.Operation;
 import com.wkfsfrc.ce.AppCore.Calculator;
 import com.wkfsfrc.ce.Exception.InvalidStatementException;
 
-public class calcWebAppUtil {
+public class CalcWebAppUtil {
 	public static String changeIntoJson(String operands) {
 		if (!operands.startsWith("[")) {
 			operands = "[" + operands;
@@ -30,8 +30,8 @@ public class calcWebAppUtil {
 					calculator.calculate(op.toString());
 					op.setResult(calculator.getResult().substring(calculator.getResult().lastIndexOf(" ") + 1,
 							calculator.getResult().length()));
-					jsonBuilder.append(mapper.writeValueAsString(op));
-					jsonBuilder.append(System.getProperty("line.separator"));
+					jsonBuilder.append(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(op));
+					jsonBuilder.append(","+System.getProperty("line.separator"));
 
 				} catch (InvalidStatementException e) {
 					System.out.println(e.getMessage());
